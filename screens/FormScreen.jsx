@@ -1,7 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Pressable, Alert, ScrollView } from 'react-native';
-import { CATEGORIAS } from '../utils/mocks';
+import  { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { apiHandler } from '../api/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -50,7 +49,7 @@ const FormScreen = ({ route, navigation, transactionsDB, setTransactionsDB }) =>
             descricao,
             valor,
             data: formatarDataBanco(data),
-            hora: data?.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+            hora: data?.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
             tipo,
             moeda,
             categoria
@@ -60,7 +59,7 @@ const FormScreen = ({ route, navigation, transactionsDB, setTransactionsDB }) =>
             else return transaction
         })] : [...transactionsDB, newTrasaction]
         setTransactionsDB(newDB)
-        Alert.alert('Sucesso', 'Transação inserida com sucesso')
+        Alert.alert('Sucesso', `Transação ${id ? 'editada' : 'inserida'} com sucesso`)
         navigation.navigate('ListaTransacoes')
     }
 
@@ -201,6 +200,7 @@ const FormScreen = ({ route, navigation, transactionsDB, setTransactionsDB }) =>
                 {
                     moeda &&
                     data &&
+                    cotacao &&
                     <View style={styles.inputContainer}>
                         <Text style={[styles.bold, styles.textCenter]}>
                             Cotação de {moeda} em {data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}:
@@ -219,8 +219,16 @@ const FormScreen = ({ route, navigation, transactionsDB, setTransactionsDB }) =>
                                 </Text>
                             </View>
                         }
-
                     </View>
+                }
+                {
+                  !cotacao &&
+                    <View style={styles.inputContainer}>
+<Text style={[styles.bold, styles.textCenter, styles.fullWidth, styles.colorRed]}>
+  Selecione um dia da semana para pegar a cotação
+  </Text>
+                    </View>
+
                 }
 
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -233,6 +241,9 @@ const FormScreen = ({ route, navigation, transactionsDB, setTransactionsDB }) =>
 };
 
 const styles = StyleSheet.create({
+      colorRed: {
+        color: "#aa3939"
+    },
     input: {
         width: '100%',
         height: 50,

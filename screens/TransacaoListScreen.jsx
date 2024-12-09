@@ -1,12 +1,10 @@
-import { View, Text, StyleSheet, ScrollView, FlatList, TextInput, Button, Alert } from 'react-native';
-import TransacaoItemList from '../components/TransacaoItemList';
+import { View, StyleSheet, FlatList, TextInput, Alert, TouchableOpacity, Text } from 'react-native';
+import TransacaoItemList from '../components/TransacaoItemList.jsx';
 import { useEffect, useState } from 'react';
-import { MOCK_TRANSACTIONS } from '../utils/mocks';
 import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
-
-export default function TransacaoListScreen({ transactionsDB, setTransactionsDB }) {
+export default function TransacaoListScreen({ transactionsDB, setTransactionsDB, navigation }) {
     const [transactions, setTransactions] = useState(transactionsDB)
     const [filter, setFilter] = useState("")
     const [orderBy, setOrderBy] = useState("")
@@ -49,9 +47,11 @@ export default function TransacaoListScreen({ transactionsDB, setTransactionsDB 
 
     return (
         <View style={styles.container}>
+        <View style={[styles.containerFilter]}>
+         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('NovaTransacao')}><Text style={styles.buttonText}>Adicionar</Text></TouchableOpacity>
+        </View>
             <View style={styles.containerFilter}>
                 <TextInput
-                    style={styles.input}
                     placeholder="Filtrar por descrição, categoria, tipo ou moeda"
                     value={filter}
                     onChangeText={setFilter}
@@ -65,7 +65,7 @@ export default function TransacaoListScreen({ transactionsDB, setTransactionsDB 
                         return value
                     })
                 }}
-                style={styles.picker}
+               
             >
                 <Picker.Item label="Ordenar por descricao" value="descricao" />
                 <Picker.Item label="Ordenar por valor" value="valor" />
@@ -99,5 +99,19 @@ const styles = StyleSheet.create({
     },
     flatList: {
         width: '100%'
-    }
+    },
+     button: {
+    backgroundColor: '#014f15',
+    paddingVertical: 5,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 })
