@@ -3,7 +3,7 @@
     "name": "dr4-at",
     "slug": "dr4-at",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
